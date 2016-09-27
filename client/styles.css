@@ -31,9 +31,10 @@
     height:240px;
     background-color:white;
     position:static;
-    padding:3px;
+    padding:0px 3px;
     color:black;
     margin-top:10px;
+    overflow:scroll;
 }
 
 #chatbox #chatprompt {
