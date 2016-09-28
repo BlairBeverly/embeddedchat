@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-var mongooseDb = mongoose.model('Mongoosedb');
+var chats = mongoose.model('Chat');
 
-function MongooseController(){
+function Chats(){
 	this.getMongoose = function(req, res){
 	// 	mongooseDb.find({}, function(err, mongooses){
 	// 		if(err){
@@ -17,4 +17,4 @@ function MongooseController(){
 	}
 }
 
-module.exports = new MongooseController();
+module.exports = new Chats();

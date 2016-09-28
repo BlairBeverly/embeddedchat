@@ -1,4 +1,4 @@
-var mongooseController = require('../controllers/mongooses.js')
+var Chats = require('../controllers/chats.js')
 
 module.exports = function(app, server){
 	app.post('/dummies/:test', function(req, res){
@@ -16,15 +16,23 @@ module.exports = function(app, server){
 
     var io = require('socket.io').listen(server);
 
-    io.sockets.on('connection', function(socket) {
+    io.on('connection', function(socket) {
         console.log('using sockets');
         console.log(socket.id);
+
+        socket.broadcast.emit('new_chat', {id:socket.id})
 
         socket.on('chat_submitted', function(data) {
             console.log(data)
             messages.push(data)
-            socket.emit('chat_updated', data);
+            io.emit('chat_updated', data);
         })
+
+        socket.on('disconnect', function () {
+            console.log('disconnected')
+            io.emit('user disconnected', {id:socket.id});
+        });
+
 
 
     })

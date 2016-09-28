@@ -1,1 +1,9 @@
-<h1>This is my index partial</h1>
+<div>
+    <h5>Chats in progress: {{socketids.length}}</h5>
+
+    <div ng-repeat="socketid in socketids" id={{socketid}} class='chatbox' data-userId = "{{socketid}}"> {{socketid}} 
+        <div id='chathistory'></div> 
+        <div id='chatprompt' contenteditable='true'></div>
+    </div>
+
+</div>

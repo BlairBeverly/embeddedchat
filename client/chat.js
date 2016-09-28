@@ -26,7 +26,7 @@ document.body.appendChild(script)
 
 // Create minimized chatbox
 var chatbox = createElement('div',[{'id': 'chatbox'}], 'closed')
-chatbox.innerHTML = 'Chat with a representative';
+chatbox.innerHTML = customMessage;
 
 // Add expand/minimize arrow to chatbox
 var arrow = createElement('div', [{'id': 'arrow'}], 'arrow-up');
@@ -47,9 +47,10 @@ window.onkeypress = function(event) {
     if (prompt.tabIndex == 0) {
         if (event.keyCode == 13) {
             socket.emit("chat_submitted", {
-                user: 'you', 
+                user: 'Site Visitor', 
                 message:prompt.innerHTML, 
-                customerId: customerId});
+                customerId: 1234,
+                id: '/#' + socket.id});
             prompt.innerHTML = '';
             return false;
         }
@@ -58,20 +59,25 @@ window.onkeypress = function(event) {
 
 var socket;
 
-
 chatbox.onclick = function(event) {
     // initialize socket and listen for chat updates
     if (!socket){
         console.log('connecting socketio')
         socket = io.connect(host);
 
+        socket.on('connect', function() {
+            console.log(socket.id)
+        })
+
         socket.on('chat_updated', function(data) {
-            console.log(data)
-            chat = "<p>" + data.user + ": " + data.message + "</p>"
-            var chatHistory = document.getElementById('chathistory')
-            console.log(chatHistory)
-            chatHistory.innerHTML = chatHistory.innerHTML + chat;
-            chatHistory.scrollTop = chatHistory.scrollHeight;
+            if (data.id == '/#' + socket.id) {
+                var chat_from = data.user == 'Site Visitor' ? 'you' : data.user
+                console.log(data)
+                chat = "<p>" + chat_from + ": " + data.message + "</p>"
+                var chatHistory = document.getElementById('chathistory')
+                chatHistory.innerHTML = chatHistory.innerHTML + chat;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
         })
     }
 

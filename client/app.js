@@ -1,4 +1,8 @@
-var myApp = angular.module('Myapp', ['ngRoute']);
+var myApp = angular
+                .module('Myapp', ['ngRoute'])
+                .run(function($log){
+                    $log.debug("MyApp is ready!")
+                });
 // We instantiate our application and we inject ngrouter so that it's available
 // and so that we can use it to set up our routes below. 
 
