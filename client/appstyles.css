@@ -19,7 +19,7 @@ div #chathistory {
     position:static;
     padding:0px 3px;
     color:black;
-    margin-top:10px;
+    /*margin-top:10px;*/
     overflow:scroll;
 }
 
@@ -56,6 +56,24 @@ div #chatprompt {
   left:280px;
 }
 
+#exitbutton {
+  display:inline-block;
+  font-size:25px;
+  position:relative;
+  left:280px;
+  cursor: pointer;
+  cursor: hand;
+}
+
 .hidden {
     display:none;
 }
+
+div.card-panel {
+  margin:2.5rem 6px 0rem 34px;
+}
+
+nav ul a {
+  font-size: 1.5rem;
+}
+

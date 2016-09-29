@@ -1,35 +1,61 @@
 myApp.factory('chatFactory', function($http){
 
-	// This is my dummyFactory. I usually add this into any project that 
-	// I do. Just so that I can use it for reference as I add new Factories
-	// below we have an example of how we would create a post request, as well 
-	// as how we would create a get request. 
-
-
-	var dummies = []
-
 	var factory = {}
+	var _avgRating;
+	var _allConvos;
+	var _allChats;
 
-	factory.getDummies = function(callback){
-		$http.get('/dummies').then(function(data){
-			mongooses = data.data;
+
+	// Gets _avgRating if exists; otherwise, calculates it
+	factory.getAvgRating = function(customerid, callback) {
+		if (!_avgRating) {
+			factory.ComputeAvgRating(customerid, function(avgrating) {
+				_avgRating = avgrating
+				callback(_avgRating)
+			})
+		} else {
+			callback(_avgRating)	
+		}
+	}
+
+	factory.getAllChats = function(customerid, callback){
+		$http.get('/chats/' + customerid).then(function(data){
 			callback(data.data);
 		});
 	}
 
-	// the info parameter below is the the dummy that we're trying to add into our database
+	factory.getAllConversations = function(customerid, callback){
+		if (!_allConvos){
+			$http.get('/conversations/' + customerid).then(function(data){
+				_allConvos = data.data
+				callback(_allConvos);
+			});
+		} else {
+			callback(_allConvos)
+		}
+	}
 
-	// I added a test for myself below. I'm passing both a body element as well a params element
-	// I use this as an initial test that I can pass information to my backend.
-	// Check out your server console and you should see the body and the value we pass through 
-	// the url. 
-	factory.addDummy = function(info, callback){
-		$http.post('/dummies/youShouldSeeThisInServerConsoleReqParams', info).then(function(data){
+	factory.ComputeAvgRating = function(customerid, callback) {
+		factory.getAllConversations(customerid, function(convos) {
+			var ratings = []
+			var ratingSum = 0;
+			for (var i=0; i<convos.length; i++) {
+				if (convos[i].rating) {
+					ratings.push(convos[i].rating)
+					ratingSum += convos[i].rating
+				}
+			}
+			callback(
+				// round avgrating to nearest hundredth
+				Number(Math.round(((ratingSum/ratings.length) +'e2'))+'e-2')
+			)
+		})
+	}
+
+	factory.addChat = function(chat){
+		$http.post('/chats', info).then(function(data){
 			if(data.error){
-				callback(data);
-			} else {
-				mongooses.push(data)
-				callback(mongooses);
+				console.log('there was a problem writing to the db');
 			}
 		})
 	}

@@ -73,3 +73,9 @@
 .hidden {
     display:none;
 }
+
+#ratingbox {
+  position:relative;
+  top:-15px;
+
+}

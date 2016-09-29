@@ -13,10 +13,14 @@ app.use( express.static( path.join( root, 'node_modules' )));
 
 app.use(bp.json())
 
-require('./server/config/db.js');
+var db = require('./server/config/db.js');
 
 var server = app.listen( port, function() {
   console.log( 'server running on port ${ port }' );
 });
 
 require('./server/config/routes.js')(app, server);
+require('./server/config/socketRoutes.js')(server);
+
+
+

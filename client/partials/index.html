@@ -1,9 +1,13 @@
 <div>
     <h5>Chats in progress: {{socketids.length}}</h5>
 
-    <div ng-repeat="socketid in socketids" id={{socketid}} class='chatbox' data-userId = "{{socketid}}"> {{socketid}} 
+    <div ng-repeat="socketid in socketids" id={{socketid.socketid}} class='chatbox' data-convo-id = "{{socketid.convoId}}">
+        <div id='exitbutton' ng-click="closeChat(socketid)"> &#xd7; </div>
         <div id='chathistory'></div> 
         <div id='chatprompt' contenteditable='true'></div>
     </div>
 
 </div>
+
+
+<!-- ng-Keypress="" -->

@@ -19,9 +19,20 @@ var link = createElement('link',
     [{'rel':'stylesheet'}, {'type':'text/css'}, {'href': host + 'styles.css'}])
 document.head.appendChild(link);
 
+// Load five-star-rating CSS stylesheet
+var link = createElement('link', 
+    [{'rel':'stylesheet'}, {'type':'text/css'}, {
+        'href': host + '/five-star-rating/css/rating.min.css'}])
+document.head.appendChild(link);
+
 // Load socket.io
 var script = createElement('script',
     [{'src':host + "socket.io/socket.io.js"}])
+document.body.appendChild(script)
+
+// Load five-star-rating
+var script = createElement('script',
+    [{'src':host + "five-star-rating/js/dist/rating.min.js"}])
 document.body.appendChild(script)
 
 // Create minimized chatbox
@@ -63,7 +74,7 @@ chatbox.onclick = function(event) {
     // initialize socket and listen for chat updates
     if (!socket){
         console.log('connecting socketio')
-        socket = io.connect(host);
+        socket = io.connect(host, {query: 'customerId=1234'});
 
         socket.on('connect', function() {
             console.log(socket.id)
@@ -78,6 +89,32 @@ chatbox.onclick = function(event) {
                 chatHistory.innerHTML = chatHistory.innerHTML + chat;
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             }
+        })
+
+        socket.on('chat_completed', function(){
+            document.getElementById('chatprompt').remove()
+
+            // add an unordered list element that will hold the rating stars
+            var box = document.getElementById('chatbox')
+            var ratingheader = createElement('P', [{'id': 'rate'}])
+            ratingheader.innerHTML = 'Rate your chat experience'
+            box.appendChild(ratingheader);
+            box.appendChild(createElement('UL',[{'id': 'ratingbox'}], 'c-rating'))
+            var ratingbox = document.querySelector('#ratingbox');
+
+
+            // current rating, or initial rating
+            var currentRating = 0;
+
+            // max rating, i.e. number of stars you want
+            var maxRating= 5;
+
+            // callback to run after setting the rating
+            var callback = function(rating) {
+                socket.emit('rating_submitted', {rating:rating}); };
+
+            // rating instance
+            var myRating = rating(ratingbox, currentRating, maxRating, callback);
         })
     }
 

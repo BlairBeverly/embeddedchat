@@ -8,10 +8,13 @@
 	<link href="appstyles.css" rel="stylesheet" >
 
     <script src = "app.js"></script>
-    <script src = "/controllers/indexController.js"></script>
-    <script src = "/factories/socketFactory.js"></script>
     <script src = "appchat.js"></script>
     <script src = "socket.io/socket.io.js"></script>
+    <script src = "/controllers/indexController.js"></script>
+    <script src = "/factories/socketFactory.js"></script>
+    <script src = "/controllers/analyticsController.js"></script>
+    <script src = "/factories/chatFactory.js"></script>
+
 </head>
 
 <body ng-app='Myapp'>
@@ -20,7 +23,7 @@
       <a href="#" class="brand-logo right">ChatterBox</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li><a href="#/">Chat</a></li>
-        <li><a href="">Analytics</a></li>
+        <li><a href="#/analytics">Analytics</a></li>
         <li><a href="">Get Code</a></li>
       </ul>
     </div>
